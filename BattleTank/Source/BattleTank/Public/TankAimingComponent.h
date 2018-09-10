@@ -20,7 +20,9 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	class UTankBarrelComponent* Barrel;
+	class UTankBarrelComponent* Barrel = nullptr;
+
+	class UTankTurretComponent* Turret = nullptr;
 
 public:	
 	// Called every frame
@@ -29,6 +31,8 @@ public:
 	void AimAt(FVector HitLocation, float LaunchSpeed);
 	
 	void SetBarrelReference(class UTankBarrelComponent* BarrelToSet);
+
+	void SetTurretReference(class UTankTurretComponent* TurretToSet);
 
 private:
 	void MoveBarrelTowards(FVector AimDirection);

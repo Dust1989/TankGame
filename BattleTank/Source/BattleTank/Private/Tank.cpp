@@ -8,7 +8,7 @@
 ATank::ATank()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	TankAimingComp = CreateDefaultSubobject<UTankAimingComponent>(TEXT("Aiming Component"));
 }
@@ -18,13 +18,6 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-// Called every frame
-void ATank::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -39,11 +32,22 @@ void ATank::SetBarrelReference(UTankBarrelComponent* BarrelToSet)
 	TankAimingComp->SetBarrelReference(BarrelToSet);
 }
 
+void ATank::SetTurretReference(UTankTurretComponent* BarrelToSet)
+{
+	TankAimingComp->SetTurretReference(BarrelToSet);
+}
+
 void ATank::AimAt(FVector HitLocation)
 {
 	if (TankAimingComp)
 	{
 		TankAimingComp->AimAt(HitLocation, LaunchSpeed);
 	}	
+}
+
+void ATank::Fire()
+{
+	auto Time = GetWorld()->GetTimeSeconds();
+	UE_LOG(LogTemp, Warning, TEXT("%f: Firing...."), Time);
 }
 

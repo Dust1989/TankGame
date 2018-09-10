@@ -4,13 +4,14 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TankBarrelComponent.h"
+#include "TankTurretComponent.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = true; // TODO Should this really tick?
 
 	// ...
 }
@@ -36,9 +37,16 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void UTankAimingComponent::SetBarrelReference(class UTankBarrelComponent* BarrelToSet)
 {
+	if (BarrelToSet == nullptr) { return; }
 	Barrel = BarrelToSet;
 }
 
+
+void UTankAimingComponent::SetTurretReference(class UTankTurretComponent* TurretToSet)
+{
+	if (TurretToSet == nullptr) { return; }
+	Turret = TurretToSet;
+}
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
@@ -53,12 +61,16 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 			StartLocation,
 			HitLocation,
 			LaunchSpeed,
+			false,
+			0,	
+			0,
 			ESuggestProjVelocityTraceOption::DoNotTrace
 	);
 
+
 	if (bHaveAimSolution)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Firing at %s"), *OutLaunchSpeed.ToString());
+		
 		FVector AimDirection = OutLaunchSpeed.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 	}
@@ -71,6 +83,12 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	FRotator AimRotator = AimDirection.Rotation();
 	FRotator DeltaRotator = AimRotator - BarrelRotator;
 
-	Barrel->Elevate(0.f);
+	Barrel->Elevate(DeltaRotator.Pitch);
+
+
+	//FRotator TurretRotator = Turret->GetForwardVector().Rotation();
+	//FRotator TurretDeltaRotator = AimRotator - TurretRotator;
+	Turret->Turn(DeltaRotator.Yaw);
+
 }
 
