@@ -69,10 +69,13 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 
 
 	if (bHaveAimSolution)
-	{
-		
+	{	
 		FVector AimDirection = OutLaunchSpeed.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
+	}
+	else
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("Elevation is %f"), Elevation);	
 	}
 
 }
@@ -85,10 +88,6 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 	Barrel->Elevate(DeltaRotator.Pitch);
 
-
-	//FRotator TurretRotator = Turret->GetForwardVector().Rotation();
-	//FRotator TurretDeltaRotator = AimRotator - TurretRotator;
 	Turret->Turn(DeltaRotator.Yaw);
-
 }
 

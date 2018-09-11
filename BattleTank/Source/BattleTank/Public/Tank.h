@@ -37,6 +37,16 @@ public:
 	void Fire();
 
 private:
-	UPROPERTY(EditAnywhere, Category = Firing)
-		float LaunchSpeed = 100000; //Sensible starting value of 1000 m/s
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float LaunchSpeed = 4000; //Sensible starting value of 1000 m/s
+
+	class UTankBarrelComponent* Barrel;
+
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	TSubclassOf<class AProjectileActor> Projectile;
+
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	float ReloadTimeInSecond = 3;
+
+	double LastFireTime = 0;
 };
