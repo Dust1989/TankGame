@@ -36,4 +36,6 @@ public:
 
 private:
 	void MoveBarrelTowards(FVector AimDirection);
+
+	float CalculateTurnAngle(float Value);
 };

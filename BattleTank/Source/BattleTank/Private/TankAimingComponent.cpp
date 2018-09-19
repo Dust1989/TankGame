@@ -88,6 +88,24 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 	Barrel->Elevate(DeltaRotator.Pitch);
 
-	Turret->Turn(DeltaRotator.Yaw);
+	auto TurnAngle = CalculateTurnAngle(DeltaRotator.Yaw);
+	Turret->Turn(TurnAngle);
+
+}
+
+float UTankAimingComponent::CalculateTurnAngle(float Value)
+{
+	if (FMath::Abs(Value) > 180)
+	{
+		if (Value > 0)
+		{
+			return (Value - 360);
+		}
+		else
+		{
+			return (Value + 360);
+		}
+	}
+	return Value;
 }
 

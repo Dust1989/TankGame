@@ -5,6 +5,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "ProjectileActor.h"
 #include "TankBarrelComponent.h"
+#include "TankMovementComponent.h"
 
 // Sets default values
 ATank::ATank()
@@ -51,8 +52,6 @@ void ATank::AimAt(FVector HitLocation)
 
 void ATank::Fire()
 {
-	auto Time = GetWorld()->GetTimeSeconds();
-	UE_LOG(LogTemp, Warning, TEXT("%f: Firing...."), Time);
 
 	bool bCanFire = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSecond;
 
@@ -65,6 +64,7 @@ void ATank::Fire()
 								);
 
 		ProjectileActor->LaunchProjectile(LaunchSpeed);
+		
 
 		LastFireTime = FPlatformTime::Seconds();
 	}

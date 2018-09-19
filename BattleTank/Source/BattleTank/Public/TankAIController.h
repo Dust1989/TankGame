@@ -20,4 +20,6 @@ protected:
 
 	virtual void Tick(float DeltaTime) override;
 
+	float AcceptanceRadius = 500.f;
+
 };
