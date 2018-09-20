@@ -35,18 +35,14 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(class UTankBarrelComponent* BarrelToSet)
+void UTankAimingComponent::Initial(class UTankBarrelComponent* BarrelToSet, class UTankTurretComponent* TurretToSet)
 {
-	if (BarrelToSet == nullptr) { return; }
+	if (!ensure(BarrelToSet != nullptr && TurretToSet != nullptr)) { return; }
+
 	Barrel = BarrelToSet;
-}
-
-
-void UTankAimingComponent::SetTurretReference(class UTankTurretComponent* TurretToSet)
-{
-	if (TurretToSet == nullptr) { return; }
 	Turret = TurretToSet;
 }
+
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
@@ -82,6 +78,8 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
+	if (!ensure(Barrel != nullptr && Turret != nullptr)) { return; }
+
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
 	FRotator AimRotator = AimDirection.Rotation();
 	FRotator DeltaRotator = AimRotator - BarrelRotator;

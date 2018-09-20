@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
+
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {
@@ -18,24 +19,19 @@ public:
 	void AimAt(FVector HitLocation);
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
+	UPROPERTY(BlueprintReadWrite, Category = Movement)
 	class UTankAimingComponent* TankAimingComp = nullptr;
 
+	/*
 	UPROPERTY(BlueprintReadOnly, Category = Movement)
 	class UTankMovementComponent* MovementComp;
+	*/
 
 public:	
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetBarrelReference(UTankBarrelComponent* BarrelToSet);
-
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetTurretReference(UTankTurretComponent* BarrelToSet);
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
@@ -53,4 +49,6 @@ private:
 	float ReloadTimeInSecond = 3;
 
 	double LastFireTime = 0;
+
+
 };

@@ -17,12 +17,18 @@ class BATTLETANK_API ATankController : public APlayerController
 {
 	GENERATED_BODY()
 	
+protected:
+
+	UFUNCTION(BlueprintCallable, Category = "SetUp")
+	ATank* GetControlledTank() const;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "SetUp")
+	void FoundAimingComponent(class UTankAimingComponent* TankAimComp);
+
 private:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
-	
-	ATank* GetControlledTank() const;
 
 	bool GetSightRayHitLocation(FVector& HitLocation) const;
 	
