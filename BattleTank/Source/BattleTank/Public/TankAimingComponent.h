@@ -38,15 +38,28 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void AimAt(FVector HitLocation, float LaunchSpeed);
+	void AimAt(FVector HitLocation);
 	
 	UFUNCTION(BlueprintCallable, Category = "SetUp")
 	void Initial(class UTankBarrelComponent* BarrelToSet, class UTankTurretComponent* TurretToSet);
+
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	void Fire();
 
 private:
 	void MoveBarrelTowards(FVector AimDirection);
 
 	float CalculateTurnAngle(float Value);
 
-	
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float LaunchSpeed = 4000; //Sensible starting value of 1000 m/s
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<class AProjectileActor> Projectile;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float ReloadTimeInSecond = 3;
+
+	double LastFireTime = 0;
+
 };

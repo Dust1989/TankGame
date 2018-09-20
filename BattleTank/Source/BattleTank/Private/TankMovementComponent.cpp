@@ -16,7 +16,7 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 	auto RightThrow = FVector::CrossProduct(ForwardVector, MoveIntention);
 
 	MoveRight(RightThrow.Z);
-	UE_LOG(LogTemp, Warning, TEXT("move %f"), RightThrow.Z);
+
 	MoveForward(ForwardThrow);
 }
 

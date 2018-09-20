@@ -2,7 +2,6 @@
 
 
 #include "TankController.h"
-#include "Tank.h"
 #include "DrawDebugHelpers.h"
 #include "TankAimingComponent.h"
 
@@ -11,15 +10,9 @@ void ATankController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto AimingComp = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-	if (AimingComp)
-	{
-		FoundAimingComponent(AimingComp);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Can't find AimingComponent"));
-	}
+	auto AimingComp = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComp)) { return; }
+	FoundAimingComponent(AimingComp);
 
 }
 
@@ -29,10 +22,6 @@ void ATankController::Tick(float DeltaTime)
 	AimTowardsCrosshair();
 }
 
-ATank* ATankController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
 
 bool ATankController::GetSightRayHitLocation(FVector& HitLocation) const
 {
@@ -53,7 +42,10 @@ bool ATankController::GetSightRayHitLocation(FVector& HitLocation) const
 
 void ATankController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank()){ return;}
+	if (!GetPawn()){ return;}
+
+	auto AimingComp = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComp)) { return; }
 
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
@@ -62,7 +54,7 @@ void ATankController::AimTowardsCrosshair()
 		//UE_LOG(LogTemp, Warning, TEXT("HitLocation is %s"), *HitLocation.ToString());
 		DrawDebugSphere(GetWorld(), HitLocation, 50.f, 20, FColor::Green, false, 0.5f, 0, 1.f);
 
-		GetControlledTank()->AimAt(HitLocation);
+		AimingComp->AimAt(HitLocation);
 	}
 
 }
