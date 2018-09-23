@@ -33,7 +33,22 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (AmmoAmount <= 0)
+	{
+		FiringState = EFiringState::NoAmmo;
+	}
+	else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSecond)
+	{
+		FiringState = EFiringState::Reloading;
+	}
+	else if (IsBarrelMoving())
+	{
+		FiringState = EFiringState::Aiming;
+	}
+	else {
+		FiringState = EFiringState::Locked;
+	}
+	
 }
 
 void UTankAimingComponent::Initial(class UTankBarrelComponent* BarrelToSet, class UTankTurretComponent* TurretToSet)
@@ -93,6 +108,7 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto TurnAngle = CalculateTurnAngle(DeltaRotator.Yaw);
 	Turret->Turn(TurnAngle);
 
+	AimIntendDirection = AimDirection;
 }
 
 float UTankAimingComponent::CalculateTurnAngle(float Value)
@@ -114,9 +130,9 @@ float UTankAimingComponent::CalculateTurnAngle(float Value)
 void UTankAimingComponent::Fire()
 {
 	if (!ensure(Barrel)) { return; }
-	bool bCanFire = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSecond;
+	if (!ensure(Projectile)) { return; }
 
-	if (Projectile && bCanFire)
+	if (FiringState != EFiringState::Reloading && FiringState != EFiringState::NoAmmo)
 	{
 		AProjectileActor* ProjectileActor = GetWorld()->SpawnActor<AProjectileActor>(
 			Projectile,
@@ -126,7 +142,27 @@ void UTankAimingComponent::Fire()
 
 		ProjectileActor->LaunchProjectile(LaunchSpeed);
 
-
 		LastFireTime = FPlatformTime::Seconds();
+
+		AmmoAmount--;
 	}
+}
+
+int32 UTankAimingComponent::GetAmmoAmount() const
+{
+	return AmmoAmount;
+}
+
+EFiringState UTankAimingComponent::GetFireState() const
+{
+	return FiringState;
+}
+
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensure(Barrel)) { return false; }
+
+	FVector BarrelVector = Barrel->GetForwardVector();
+
+	return !BarrelVector.Equals(AimIntendDirection, 0.01);
 }

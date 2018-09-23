@@ -4,7 +4,6 @@
 #include "TankTrackComponent.h"
 
 
-
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
 	auto TankName = GetOwner()->GetName();

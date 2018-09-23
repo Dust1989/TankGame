@@ -11,7 +11,8 @@ enum class EFiringState : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	NoAmmo
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -46,10 +47,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	int32 GetAmmoAmount() const;
+
+	EFiringState GetFireState() const;
+
 private:
 	void MoveBarrelTowards(FVector AimDirection);
 
 	float CalculateTurnAngle(float Value);
+
+	bool IsBarrelMoving();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 4000; //Sensible starting value of 1000 m/s
@@ -62,4 +70,8 @@ private:
 
 	double LastFireTime = 0;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int32 AmmoAmount = 10;
+
+	FVector AimIntendDirection;
 };

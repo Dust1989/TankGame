@@ -30,4 +30,5 @@ public:
 	UFUNCTION(BlueprintCallable, category = Setup)
 	void InitialTankTrack(class UTankTrackComponent* LeftTrackToSet, class UTankTrackComponent* RightTrackToSet);
 	
+
 };
