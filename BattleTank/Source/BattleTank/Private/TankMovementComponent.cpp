@@ -33,10 +33,12 @@ void UTankMovementComponent::MoveRight(float Throw)
 	if (Throw > 0)
 	{
 		LeftTrack->SetThrottle(Throw);
+		RightTrack->SetThrottle(-Throw/3);
 	}
 	else
 	{
 		RightTrack->SetThrottle(-Throw);
+		LeftTrack->SetThrottle(Throw/3);
 	}
 }
 

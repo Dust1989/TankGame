@@ -16,7 +16,11 @@ UCLASS()
 class BATTLETANK_API ATankController : public APlayerController
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnDead();
 protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "SetUp")

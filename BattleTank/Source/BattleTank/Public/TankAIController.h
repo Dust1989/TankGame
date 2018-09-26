@@ -14,12 +14,17 @@ class BATTLETANK_API ATankAIController : public AAIController
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION()
+	void OnDead();
+
 protected:
+	virtual void SetPawn(APawn* InPawn) override;
 
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
 
-	float AcceptanceRadius = 500.f;
+	float AcceptanceRadius = 2000.f;
 
 };

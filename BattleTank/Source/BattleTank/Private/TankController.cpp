@@ -4,7 +4,23 @@
 #include "TankController.h"
 #include "DrawDebugHelpers.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 
+
+void ATankController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	auto PossessPawn = Cast<ATank>(InPawn);
+	if (!ensure(PossessPawn)) { return; }
+
+	PossessPawn->OnDead.AddDynamic(this, &ATankController::OnDead);
+}
+
+void ATankController::OnDead()
+{
+	StartSpectatingOnly();
+}
 
 void ATankController::BeginPlay()
 {
@@ -33,10 +49,10 @@ bool ATankController::GetSightRayHitLocation(FVector& HitLocation) const
 	FVector LookDirection;
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
-		GetLookVectorHitLocation(LookDirection, HitLocation);		
+		return GetLookVectorHitLocation(LookDirection, HitLocation);		
 	}
 	
-	return true;
+	return false;
 
 }
 

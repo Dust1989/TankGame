@@ -21,6 +21,24 @@ protected:
 
 	class UProjectileMovementComponent* ProjectileMovementComp;
 
+	UPROPERTY(VisibleAnywhere, Category = "Component")
+	class UStaticMeshComponent* MeshComp;
+
+	UPROPERTY(VisibleAnywhere, Category = "Component")
+	class UParticleSystemComponent* TrailParticle;
+
+	UPROPERTY(VisibleAnywhere, Category = "Component")
+	class UParticleSystemComponent* ExplodeParticle;
+
+	UPROPERTY(VisibleAnywhere, Category = "Component")
+	class URadialForceComponent* ExplodeForce;
+
+	UPROPERTY(EditDefaultsOnly, Category = "SetUp")
+	float DestroyDelay = 5;
+
+	UPROPERTY(EditDefaultsOnly, Category = "SetUp")
+	float DamageAmount = 100;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -28,4 +46,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Fire)
 	void LaunchProjectile(float Speed);
 	
+private:
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	FTimerHandle Destroy_TimerHandle;
+
+	void DestroyProjectile();
 };
